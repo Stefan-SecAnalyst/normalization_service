@@ -1,0 +1,15 @@
+# Virtual environment
+venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test output
+test_files/
+tests/
+
+# Editor directories and files
+.vscode/
+*.swp
