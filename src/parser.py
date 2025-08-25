@@ -1,5 +1,11 @@
 import os
 import csv
+import re
+
+
+
+pattern = r"\[(?P<timestamp>[^\]]+)\] (?P<system>[^\s]+) (?P<level>[A-Z]+)\((?P<code>\d+)\): (?P<message>.+)"
+
 
 
 def read_csv_file(file_path):
@@ -12,6 +18,17 @@ def read_csv_file(file_path):
     print(csv_dict)
     return csv_dict
 
+def parse_text_file(file_path):
+    re.compile(pattern)
+    parsed_lines = []
+    with open(file_path, 'r') as file:
+        for line in file:
+            line = line.strip()
+            match = re.match(pattern, line)
+            if match:
+                parsed_lines.append(match.groupdict())
+    print(parsed_lines)
+    return parsed_lines
 
 
 def parse_file(file_path):
@@ -43,13 +60,15 @@ def parse_file_type(name, file_path,ext):
         new_file_path = os.path.join(file_path, name)
         print(f"Reading CSV file: {new_file_path}")
         read_csv_file(new_file_path)
-        return 'text'
-    elif ext in ['.jpg', '.png', '.gif']:
-        print(f"Parsing {ext} as binary file")
+        return 'CSV File Read'
+    elif ext in ['.jpg', '.png', '.gif', '.md']:
+        print(f"Parsing {ext} as non-usable  file")
         return 'binary'
-    elif ext in ['.txt','.md']:
+    elif ext in ['.txt', '.log']:
         print(f"Parsing {ext} as text file")
-        return 'text'
+        new_file_path = os.path.join(file_path, name)
+        parse_text_file(new_file_path)
+        return 'Text File Read'
     elif ext in ['.json']:
         print(f"Parsing {ext} as JSON file")
         return 'json'
