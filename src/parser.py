@@ -1,7 +1,7 @@
 import os
 import csv
 import re
-
+import config_utils
 
 
 pattern = r"\[(?P<timestamp>[^\]]+)\] (?P<system>[^\s]+) (?P<level>[A-Z]+)\((?P<code>\d+)\): (?P<message>.+)"
@@ -79,6 +79,10 @@ def parse_file_type(name, file_path,ext):
 script_dir = os.path.dirname(__file__)
 project_root = os.path.abspath(os.path.join(script_dir, '..'))
 test_dir = os.path.join(project_root, 'test_files')
+
+#Call validation
+loaded_config = config_utils.validate_json()
+
 
 # Check if the test directory exists and list its contents
 print("Looking in:", project_root)

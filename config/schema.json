@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Normalization Log File Schema",
+  "type": "object",
+  "properties": {
+    "timestamp": { "type": "string" },
+    "system": { "type": "string" },
+    "level": { "type": "string" },
+    "code": { "type": "integer" },
+    "message": { "type": "string" }
+  },
+  "required": ["timestamp", "system", "level", "code", "message"]
+}

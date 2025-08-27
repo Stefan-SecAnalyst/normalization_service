@@ -1,0 +1,7 @@
+{
+  "timestamp": "2025-08-14 09:15:23",
+  "system": "SYSTEM-A",
+  "level": "ERROR",
+  "code": 1001,
+  "message": "Disk space low"
+}
