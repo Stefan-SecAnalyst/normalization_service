@@ -9,6 +9,55 @@ from src.normalizer import normalize_record
 
 pattern = r"\[(?P<timestamp>[^\]]+)\] (?P<system>[^\s]+) (?P<level>[A-Z]+)\((?P<code>\d+)\): (?P<message>.+)"
 
+
+
+def prompt_options():
+    value = ''
+    while(True):
+        prompt = "Select O for Override or C for Copy".strip().upper()
+        if prompt in ['O', 'C']:
+            value = prompt
+            break
+        else:
+            print("Invalid input. Please try again.")
+    return value
+
+def file_output(file_path, records, name):
+    # Use current file script location to find project root and output folder
+    script_dir = os.path.dirname(__file__)
+    project_root = os.path.abspath(os.path.join(script_dir, '..'))
+    output_dir = os.path.join(project_root, 'output_folder')
+    # Verify folder exits, if not create it
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    #Define file output name
+    file_name = name + '_normalized.json'
+    #Output full path
+    output_path = os.path.join(output_dir, file_name)
+    # Check if file name already exists, and if so, what do I do?
+    if os.path.exists(output_path):
+        print(f"File {file_name} already exists in output_folder. Select Overwrite or Copy")
+        # Prompt user for action
+        prompt = prompt_options()
+        if prompt == 'O':
+            print("Overwriting file...")
+            with open(output_path, 'w') as outfile:
+                json.dump(records, outfile, indent=4)
+        elif prompt == 'C':
+            print("Creating a copy...")
+            copy_number = 1
+            while True:
+                copy_file_name = f"{name}_normalized_copy_{copy_number}.json"
+                copy_output_path = os.path.join(output_dir, copy_file_name)
+                if not os.path.exists(copy_output_path):
+                    with open(copy_output_path, 'w') as outfile:
+                        json.dump(records, outfile, indent=4)
+                    break
+                copy_number += 1
+        else:
+            print("Invalid input. Aborting.")
+            return
+
 def record_normalization(records, loaded_Config):
     print(f"Records object is of {type(records)}")
     normalized_records = []
