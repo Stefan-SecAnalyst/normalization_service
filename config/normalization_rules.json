@@ -1,7 +1,27 @@
 {
-  "timestamp": "2025-08-14 09:15:23",
-  "system": "SYSTEM-A",
-  "level": "ERROR",
-  "code": 1001,
-  "message": "Disk space low"
+  "fields": {
+    "timestamp": {
+      "type": "datetime",
+      "input_format": "%Y-%m-%d %H:%M:%S",
+      "output_format": "%Y-%m-%dT%H:%M:%SZ"
+    },
+    "system": {
+      "type": "string",
+      "transform": "upper"
+    },
+    "level": {
+      "type": "string",
+      "allowed_values": ["ERROR", "WARN", "INFO"],
+      "transform": "upper"
+    },
+    "code": {
+      "type": "integer",
+      "min_value": 1000,
+      "max_value": 9999
+    },
+    "message": {
+      "type": "string",
+      "mask_keywords": ["password", "secret"]
+    }
+  }
 }

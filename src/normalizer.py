@@ -1,37 +1,37 @@
 
-def normalizer (record, rules):
+def normalize_record (record, rules):
     normalized = {}  # Start an empty dict for output
+
     for field, value in record.items():
         if field in rules:
             rule = rules[field]
     
             if rule.get("type") == "datetime":
-                normalized = datetime_normalizer(value, rule)
+                normalized_value = datetime_normalizer(value, rule)
 
 
             elif rule.get("transform") == "uppercase":
                 normalized_value = uppercase_normalizer(value)
 
-            elif rule.get("transfrom") == "lowercase":
+            elif rule.get("transform") == "lowercase":
                 normalized_value = lowercase_normalizer(value)
 
+            elif rule.get("type") == "integer":
+                normalized_value = code_normalizer(value, rule)
+
+            elif field == "message" and "mask_keywords" in rule:
+                normalized_value = message_normalizer(rule, value)
+
             else:
-                normalized[field] = value
+                normalized_value = value
         #Enforce Allowed Values
         allowed = rule.get("allowed_values")
 
-        if allowed and normalized[field] not in allowed:
-            normalized[field] = None
+        if allowed and normalized_value not in allowed:
+            normalized_value = None
 
-        if rule.get("type") == "integer":
-            code_normalizer(value, rule)
 
-        if field = "message" and "mask_keywords" in rule:
-
-            normalized_value = value
-            normalized[field] = normalized_value
-        else:
-            normalized[field] = value
+        normalized[field] = normalized_value
     return normalized
 
 
@@ -67,7 +67,7 @@ def lowercase_normalizer(value):
 
 def code_normalizer(value, rule):
     try:
-        value = int(value)
+        normalized_value = int(value)
     except Exception:
         value = None
 
