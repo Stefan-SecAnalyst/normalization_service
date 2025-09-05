@@ -1,0 +1,37 @@
+[
+    {
+        "timestamp": "2025-08-14T09:15:23Z",
+        "system": "SYSTEM-A",
+        "level": "ERROR",
+        "code": 1001,
+        "message": "Disk space low"
+    },
+    {
+        "timestamp": "2025-08-14T09:16:10Z",
+        "system": "SYSTEM-B",
+        "level": "WARN",
+        "code": 2001,
+        "message": "Connection timeout"
+    },
+    {
+        "timestamp": "2025-08-14T09:17:42Z",
+        "system": "SYSTEM-A",
+        "level": "INFO",
+        "code": 3001,
+        "message": "Disk space restored"
+    },
+    {
+        "timestamp": "2025-08-14T09:20:05Z",
+        "system": "SYSTEM-C",
+        "level": "ERROR",
+        "code": 4001,
+        "message": "Authentication failed for user alice"
+    },
+    {
+        "timestamp": "2025-08-14T09:22:31Z",
+        "system": "SYSTEM-B",
+        "level": "INFO",
+        "code": 5001,
+        "message": "Service restarted"
+    }
+]

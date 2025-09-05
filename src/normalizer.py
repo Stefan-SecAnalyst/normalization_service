@@ -1,37 +1,45 @@
 
-def normalize_record (record, rules):
-    normalized = {}  # Start an empty dict for output
+def normalize_record(record, rules):
+    normalized = {}
+    # Optionally define a field mapping to handle source name differences
+    field_map = {
+        "timestamp": ["timestamp"],
+        "system": ["system", "system_name"],
+        "level": ["level"],
+        "code": ["code", "error_code"],
+        "message": ["message", "msg"]
+    }
 
-    for field, value in record.items():
-        if field in rules:
-            rule = rules[field]
-    
+    for out_field, rule in rules.items():
+        print(f"Normalizing output field: {out_field} using rule: {rule}")
+        # Try each possible input field for this output field
+        input_value = None
+        for possible_key in field_map.get(out_field, [out_field]):
+            if possible_key in record:
+                input_value = record[possible_key]
+                break
+
+        normalized_value = input_value  # default
+
+        if input_value is not None:
             if rule.get("type") == "datetime":
-                normalized_value = datetime_normalizer(value, rule)
-
-
-            elif rule.get("transform") == "uppercase":
-                normalized_value = uppercase_normalizer(value)
-
-            elif rule.get("transform") == "lowercase":
-                normalized_value = lowercase_normalizer(value)
-
+                normalized_value = datetime_normalizer(input_value, rule)
+            elif rule.get("transform") == "upper":
+                normalized_value = uppercase_normalizer(input_value)
+            elif rule.get("transform") == "lower":
+                normalized_value = lowercase_normalizer(input_value)
             elif rule.get("type") == "integer":
-                normalized_value = code_normalizer(value, rule)
+                normalized_value = code_normalizer(input_value, rule)
+            elif out_field == "message" and "mask_keywords" in rule:
+                normalized_value = message_normalizer(rule, input_value)
 
-            elif field == "message" and "mask_keywords" in rule:
-                normalized_value = message_normalizer(rule, value)
+            # Enforce allowed values if defined
+            allowed = rule.get("allowed_values")
+            if allowed and normalized_value not in allowed:
+                normalized_value = None
 
-            else:
-                normalized_value = value
-        #Enforce Allowed Values
-        allowed = rule.get("allowed_values")
-
-        if allowed and normalized_value not in allowed:
-            normalized_value = None
-
-
-        normalized[field] = normalized_value
+        normalized[out_field] = normalized_value
+        print("Normalized record:", normalized)
     return normalized
 
 
@@ -80,7 +88,7 @@ def code_normalizer(value, rule):
         normalized_value = None
 
     
-    return value
+    return normalized_value
 
 
 def message_normalizer(rule, value):

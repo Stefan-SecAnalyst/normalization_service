@@ -14,7 +14,7 @@ pattern = r"\[(?P<timestamp>[^\]]+)\] (?P<system>[^\s]+) (?P<level>[A-Z]+)\((?P<
 def prompt_options():
     value = ''
     while(True):
-        prompt = "Select O for Override or C for Copy".strip().upper()
+        prompt = input("Select O for Override or C for Copy").strip().upper()
         if prompt in ['O', 'C']:
             value = prompt
             break
@@ -27,13 +27,16 @@ def file_output(file_path, records, name):
     script_dir = os.path.dirname(__file__)
     project_root = os.path.abspath(os.path.join(script_dir, '..'))
     output_dir = os.path.join(project_root, 'output_folder')
+    print(f"Output directory is: {output_dir}")
     # Verify folder exits, if not create it
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     #Define file output name
     file_name = name + '_normalized.json'
+    print(f"Output file name will be: {file_name}")
     #Output full path
     output_path = os.path.join(output_dir, file_name)
+    print(f"Output full path will be: {output_path}")
     # Check if file name already exists, and if so, what do I do?
     if os.path.exists(output_path):
         print(f"File {file_name} already exists in output_folder. Select Overwrite or Copy")
@@ -57,6 +60,9 @@ def file_output(file_path, records, name):
         else:
             print("Invalid input. Aborting.")
             return
+    else:
+        with open(output_path, 'w') as outfile:
+            json.dump(records, outfile, indent=4)
 
 def record_normalization(records, loaded_Config):
     print(f"Records object is of {type(records)}")
@@ -148,7 +154,8 @@ def parse_file_type(name, file_path,ext, loaded_Config):
         print(f"Reading CSV file: {new_file_path}")
         records = read_csv_file(new_file_path)
         normalized = record_normalization(records, loaded_Config)
-        print(f"This is the new .csv file normalized form: {normalized}")
+        file_output(new_file_path, normalized, name)
+        # print(f"This is the new .csv file normalized form: {normalized}")
         return 'CSV File Read'
     elif ext in ['.jpg', '.png', '.gif', '.md']:
         print(f"Parsing {ext} as non-usable  file")
@@ -157,13 +164,15 @@ def parse_file_type(name, file_path,ext, loaded_Config):
         print(f"Parsing {ext} as text file")
         records = parse_text_file(new_file_path)
         normalized = record_normalization(records, loaded_Config)
-        print(f"This is the new .txt file normalized form: {normalized}")
+        file_output(new_file_path, normalized, name)
+        # print(f"This is the new .txt file normalized form: {normalized}")
         return 'Text File Read'
     elif ext in ['.json']:
         print(f"Parsing {ext} as JSON file")
         records = universal_json_reader(new_file_path)
         normalized = record_normalization(records, loaded_Config)
-        print(f"This is the .json file normalized form {normalized}")
+        file_output(new_file_path, normalized, name)
+        # print(f"This is the .json file normalized form {normalized}")
         return 'json'
     else:
         return 'unknown'
