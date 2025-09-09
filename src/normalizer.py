@@ -77,7 +77,7 @@ def code_normalizer(value, rule):
     try:
         normalized_value = int(value)
     except Exception:
-        value = None
+        normalized_value = None
 
     minv = rule.get("min_value")
     maxv = rule.get("max_value")

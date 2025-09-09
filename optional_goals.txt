@@ -1,0 +1,59 @@
+1. Substring/Fuzzy Field Matching
+
+Add an option to allow partial substring matching for field detection.
+
+Useful when input field names are unpredictable, e.g., "system_location" or "error_code_number".
+
+Make this feature togglable via config or CLI flag.
+
+2. Additional Output Formats
+
+Support exporting normalized data as CSV or Parquet (not just JSON).
+
+Allow user to select output format via CLI flag or config.
+
+Example: --output-format csv or --output-format parquet.
+
+3. CLI Automation Flags
+
+Add CLI options to skip user prompts (e.g., --force-overwrite).
+
+Allows fully automated batch processing for pipelines/scripts.
+
+4. API/GUI Layer
+
+Build a simple REST API using FastAPI or Flask to allow uploading files and downloading normalized output via HTTP.
+
+Optionally, provide a basic web interface (GUI) for manual uploads and downloads.
+
+5. Sample Data and Demo Scripts
+
+Add sample input files (CSV, TXT, JSON) and corresponding sample configs.
+
+Provide demo scripts or a “quickstart” shell script for new users.
+
+6. Logging and Error Reporting
+
+Expand logging (using Python’s logging module) to record info/warnings/errors.
+
+Optionally, add log file output and log level controls via CLI/config.
+
+7. Dockerization
+
+Add a Dockerfile to enable containerized deployment.
+
+Optionally, add docker-compose.yml for multi-container workflows.
+
+8. CI/CD Integration
+
+Set up GitHub Actions or another CI to automatically run tests on each commit or pull request.
+
+Ensures codebase stays healthy and tested.
+
+9. Extensible Plugins/Custom Hooks
+
+Allow users to add custom normalization or enrichment plugins, e.g., for geolocation or user lookups.
+
+10. Extended Validation & Schema Enforcement
+
+Use jsonschema or pydantic for full data validation and schema enforcement on both input and output.
